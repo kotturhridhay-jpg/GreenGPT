@@ -8,17 +8,17 @@ import torch.nn.functional as F  # Imports PyTorch loss and activation functions
 
 # ========================= Configuration =========================
 SEED = 42                       # Sets the random seed to 42 so that random operations, such as weight initialization and data sampling, produce reproducible results across runs.
-MAX_CHARS = 750_000             # Sets the maximum number of characters to load from the training dataset, allowing the model to train on up to 750,000 characters.
-DEFAULT_STEPS = 7500            # Sets the default number of training iterations to 7,500, giving the model more opportunities to update its weights.
+MAX_CHARS = None                # Loads the entire dataset file (no truncation), maximizing available training characters to help prevent overfitting.
+DEFAULT_STEPS = 3000            # Sets the default number of training iterations to 3,000, balancing convergence with reduced risk of memorizing the dataset.
 DEFAULT_BATCH_SIZE = 32         # Sets the number of training sequences processed together in one training step; a smaller batch helps manage memory usage.
-DEFAULT_SEQ_LEN = 192           # Sets the context length to 192 tokens, meaning the model can consider up to 192 previous characters when predicting the next character.
-DEFAULT_DIM_MODEL = 320         # Sets the model's embedding and hidden representation size to 320 dimensions, increasing the amount of information each token can represent.
+DEFAULT_SEQ_LEN = 256           # Sets the context length to 256 tokens, meaning the model can consider up to 256 previous characters when predicting the next character.
+DEFAULT_DIM_MODEL = 320         # Sets the model's embedding and hidden representation size to 320 dimensions (64 dimensions per head across 5 heads).
 DEFAULT_N_HEADS = 5             # Sets the number of parallel self-attention heads to 5, allowing the model to learn different relationships between tokens simultaneously.
-DEFAULT_BLOCKS = 5              # Sets the number of Transformer blocks to 5, increasing the depth of the network and the number of processing stages applied to the input.
+DEFAULT_BLOCKS = 4              # Sets the number of Transformer blocks to 4, balancing model depth with parameter count to limit overfitting.
 DEFAULT_LEARNING_RATE = 0.0003  # Sets the learning rate to 0.0003, controlling how large each optimizer update is when adjusting the model's trainable parameters.
-DEFAULT_SAMPLE_EVERY = 1500     # Sets the interval between generated training samples to 1,500 steps, reducing how frequently the model pauses to display generated text.
+DEFAULT_SAMPLE_EVERY = 1000     # Sets the interval between generated training samples to 1,000 steps, letting you inspect progress three times during a 3,000-step run.
 DEFAULT_GENERATE_TOKENS = 150   # Sets the number of new characters generated in each sample to 150, allowing longer text samples to be inspected.
-DEFAULT_DROPOUT_RATE = 0.12     # Sets the dropout probability to 12%, randomly disabling a fraction of activations during training to help reduce overfitting.
+DEFAULT_DROPOUT_RATE = 0.20     # Sets the dropout probability to 20%, randomly disabling a fifth of activations during training to help reduce overfitting.
 
 # Keep the original NumPy implementation's float64 parameter precision and run on CPU.
 DEVICE = torch.device("cpu")  # Creates a PyTorch device object that forces all model operations to run on the CPU.
